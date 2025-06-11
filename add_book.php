@@ -1,6 +1,10 @@
 <?php
+include "./conn/conn.php";
+include "./templates/header.php";
 
-include "./templates/header.php"
+$sql = "SELECT * FROM janrs";
+$result = mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
+
 ?>
 
         <!-- Основное содержимое -->
@@ -11,7 +15,7 @@ include "./templates/header.php"
                         <h2>Добавить новую книгу</h2>
                     </div>
                     <div class="modal-body">
-                        <form id="book-form" method="post" action="">
+                        <form id="book-form" method="post" action="./functions/add_book_f.php">
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="book-title">Название книги*</label>
@@ -30,10 +34,11 @@ include "./templates/header.php"
                                     <label for="book-genre">Жанр*</label>
                                     <select id="book-genre" name="book-genre">
                                         <option value="0">Выберите жанр</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>                                        
+                                        <?php 
+                                        foreach ($result as $row) {
+                                            echo "<option value=\"{$row['janr_id']}\">{$row['name']}</option>";
+                                        }
+                                        ?>                                      
                                     </select>
                                     <span class="error-message"></span>
                                 </div>

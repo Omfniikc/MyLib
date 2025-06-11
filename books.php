@@ -5,6 +5,9 @@ echo $user_id;
 $sql = "SELECT books.*, janrs.name as janr_name FROM `books` INNER JOIN janrs on books.janr_id = janrs.janr_id WHERE user_id = $user_id; ";
 $result = mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
 
+$sql = "SELECT * FROM janrs";
+$ganres = mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
+
 include "./templates/header.php";
 ?>
 
@@ -26,9 +29,11 @@ include "./templates/header.php";
                             <input type="hidden" name="action" value="filter">
                             <select class="form-control" name="genre-filter">
                                 <option value="0">Все жанры</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="2">2</option>
+                                <?php 
+                                    foreach ($ganres as $row) {
+                                        echo "<option value=\"{$row['janr_id']}\">{$row['name']}</option>";
+                                    }
+                                ?> 
                             </select>
                             <button class="btn btn-primary">Выбрать</button>
                         </form>
