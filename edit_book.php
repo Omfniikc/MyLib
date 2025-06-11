@@ -1,4 +1,14 @@
 <?php
+include "./conn/conn.php";
+
+$book_id = $_GET["book_id"];
+$user_id = $_SESSION["user_id"];
+$sql = "SELECT * FROM `books` WHERE book_id = $book_id AND user_id = $user_id;"; 
+$result = mysqli_fetch_assoc(mysqli_query($conn, $sql));
+
+$sql = "SELECT * FROM janrs";
+$ganres = mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
+
 include "./templates/header.php";
 ?>
 
@@ -7,7 +17,7 @@ include "./templates/header.php";
             <div class="container">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2>Редактирование книги: book_name</h2>
+                        <h2>Редактирование книги: <?=$result["name"]?></h2>
                     </div>
                     <div class="modal-body">
                         <form method="post" action="php_edit.php">
@@ -18,12 +28,12 @@ include "./templates/header.php";
                             <div class="form-row">
                                 <div class="form-group ">
                                     <label >Название книги*</label>
-                                    <input type="text" name="book-title"  placeholder="Введите название книги">
-                                    <span class="error-message">error</span>
+                                    <input type="text" name="book-title"  placeholder="Введите название книги" value="<?=$result["name"]?>">
+                                    <span class="error-message"></span>
                                 </div>
                                 <div class="form-group">
                                     <label >Автор*</label>
-                                    <input type="text" name="book-author"  placeholder="Введите автора">
+                                    <input type="text" name="book-author"  placeholder="Введите автора" value="<?=$result["author"]?>">
                                     <span class="error-message"></span>
                                 </div>
                             </div>
@@ -32,21 +42,24 @@ include "./templates/header.php";
                                 <div class="form-group">
                                     <label >Жанр*</label>
                                     <select name="book-genre" >
-                                        <option value="1">фантастика</option>
-                                        <option value="2">фантастика</option>
-                                        <option value="3">фантастика</option>
+                                        <?php
+                                        foreach ($ganres as $row) {
+                                            $selected = ($row['janr_id'] == $result['janr_id']) ? 'selected' : '';
+                                            echo "<option value=\"{$row['janr_id']}\" $selected>{$row['name']}</option>";
+                                        }
+                                        ?>
                                     </select>
                                     <span class="error-message"></span>
                                 </div>
                                 <div class="form-group">
                                     <label >Год издания*</label>
-                                    <input type="number" name="book-year" value="year" placeholder="Год издания">
+                                    <input type="number" name="book-year" placeholder="Год издания" value="<?=$result["year"]?>">
                                     <span class="error-message"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="book-description">Описание</label>
-                                <textarea id="book-description" name="book-description" rows="4" class="" placeholder="Краткое описание книги (до 500 символов)">description</textarea>
+                                <textarea id="book-description" name="book-description" rows="4" class="" placeholder="Краткое описание книги (до 500 символов)"><?=$result["description"]?></textarea>
                                 <span class="error-message"></span>
                             </div>
     
@@ -54,7 +67,7 @@ include "./templates/header.php";
                                 <label >Обложка книги</label>
                                 <div class="cover-upload">
                                     <div class="cover-preview">
-                                        <img id="cover-preview" src="img/test.jpg" alt="Предпросмотр обложки" >
+                                        <img id="cover-preview" src="<?=$result["img"]?>" alt="Предпросмотр обложки" >
                                     </div>
                                     <div class="upload-controls">
                                         
