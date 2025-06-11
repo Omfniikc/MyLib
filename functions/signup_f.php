@@ -5,13 +5,6 @@ $email = $_POST["email"];
 $pass = $_POST["pass"];
 $errors = [];
 
-// print_r($email);
-// print_r($pass);
-// exit();
-
-
-
-
 
 if (empty($email)) {
     $errors["email"] = "Заполните поле email";

@@ -1,9 +1,12 @@
 <?php
 include "./conn/conn.php";
-include "./templates/header.php";
 
 $sql = "SELECT * FROM janrs";
 $result = mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
+
+$errors = $_SESSION["errors"];
+unset($_SESSION["errors"]);
+include "./templates/header.php";
 
 ?>
 
@@ -15,17 +18,17 @@ $result = mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
                         <h2>Добавить новую книгу</h2>
                     </div>
                     <div class="modal-body">
-                        <form id="book-form" method="post" action="./functions/add_book_f.php">
+                        <form id="book-form" method="post" action="./functions/add_book_f.php" enctype="multipart/form-data">
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="book-title">Название книги*</label>
                                     <input type="text" id="book-title" name="book-title" placeholder="Введите название книги">
-                                    <span class="error-message"></span>
+                                    <span class="error-message"><?=$errors["title"]?></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="book-author">Автор*</label>
                                     <input type="text" id="book-author" name="book-author" placeholder="Введите автора">
-                                    <span class="error-message"></span>
+                                    <span class="error-message"><?=$errors["author"]?></span>
                                 </div>
                             </div>
     
@@ -40,19 +43,19 @@ $result = mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
                                         }
                                         ?>                                      
                                     </select>
-                                    <span class="error-message"></span>
+                                    <span class="error-message"><?=$errors["genre"]?></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="book-year">Год издания*</label>
                                     <input type="number" id="book-year" name="book-year" placeholder="Год издания">
-                                    <span class="error-message"></span>
+                                    <span class="error-message"><?=$errors["year"]?></span>
                                 </div>
                             </div>
     
                             <div class="form-group">
                                 <label for="book-description">Описание</label>
                                 <textarea id="book-description" name="book-description" rows="4" placeholder="Краткое описание книги (до 500 символов)"></textarea>
-                                <span class="error-message"></span>
+                                <span class="error-message"><?=$errors["description"]?></span>
                             </div>
     
                             <div class="form-group">
@@ -66,7 +69,7 @@ $result = mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
                                         <label class="btn btn-secondary"><i class="fas fa-upload"></i>
                                             <input type="file" id="book-cover" name="book-cover"> Загрузить изображение
                                             
-                                            <span class="error-message"></span>
+                                            <span class="error-message"><?=$errors["file"]?></span>
                                         </label>
                                     </div>
                                 </div>
